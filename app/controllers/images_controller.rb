@@ -1,6 +1,6 @@
 class ImagesController < ApplicationController
   before_action :set_image, only: [:show, :update, :destroy, :content]
-  wrap_parameters :image, include: ["caption"]
+  wrap_parameters :image, include: ["caption", "profile"]
   before_action :authenticate_user!, only: [:create, :update, :destroy]
   after_action :verify_authorized, except: [:content]
   after_action :verify_policy_scoped, only: [:index]

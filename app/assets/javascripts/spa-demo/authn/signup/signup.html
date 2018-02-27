@@ -45,14 +45,28 @@
           ng-hide="signup_form.$dirty">{{$ctrl.signupForm.errors.password_confirmation}}</span>
   </div>
 
-  <sd-image-loader
+  <div class="image-content row col-lg-12">
+    <label class="col-xs-3"></label>
+    <div class="col-xs-12 col-sm-9 image-rendering">  
+      <div class="image-existing">
+        <img class="img-responsive img-rounded" 
+             style="width: 250px"             
+             ng-src="{{$ctrl.item.content_url}}?width=250"
+             ng-if="$ctrl.item.content_url" />
+      </div>  
+
+      <sd-image-loader
             class="image-select"
             result-data-uri="$ctrl.setImageContent(dataUri)"
-            ng-if="!$ctrl.item.id && $ctrl.authz.canCreate">
+            ng-if="!$ctrl.item.id">
           <span class="invalid"
                 ng-show="imageform['image-file'].$error.maxSize"
                 >image size is too large (max=10MB)</span>          
-  </sd-image-loader>
+      </sd-image-loader>      
+      <span class="invalid">{{$ctrl.item.errors.content_type}}</span>
+      <span class="invalid">{{$ctrl.item.errors.content}}</span>      
+    </div>
+  </div>
 
   <div id="signup-controls" class="row col-lg-12">
     <button ng-hide="$ctrl.id"
