@@ -1,10 +1,11 @@
 namespace :ptourist do
-  MEMBERS=["mike","carol","alice","greg","marsha","peter","jan","bobby","cindy", "sam"]
-  ADMINS=["mike","carol"]
+  MEMBERS=["morty","carol","alice","greg","marsha","peter","jan","bobby","cindy", "sam"]
+  ADMINS=["morty","carol"]
   ORIGINATORS=["carol","alice"]
   BOYS=["greg","peter","bobby"]
   GIRLS=["marsha","jan","cindy"]
   BASE_URL="https://dev9.jhuep.com/fullstack-capstone"
+  MORTY_URL = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhY5vZCc-b1wzx2KmPrpTEfeNxFfdBMkUfXHn7hh-SYksOujEjDA"
 
   def user_name first_name
     last_name = (first_name=="alice") ? "nelson" : "brady"
@@ -46,11 +47,11 @@ namespace :ptourist do
   def girl_users
     @girl_users ||= users(GIRLS)
   end
-  def mike_user
-    @mike_user ||= get_user("mike")
+  def morty_user
+    @morty_user ||= get_user("morty")
   end
 
-  def create_image organizer, img
+  def create_image(organizer, img)
     puts "building image for #{img[:caption]}, by #{organizer.name}"
     image=Image.create(:creator_id=>organizer.id,:caption=>img[:caption])
     organizer.add_role(Role::ORGANIZER, image).save
@@ -71,7 +72,7 @@ namespace :ptourist do
     thing=Thing.create!(thing)
     organizer.add_role(Role::ORGANIZER, thing).save
     m=members.map { |member|
-      unless (member.id==organizer.id || member.id==mike_user.id)
+      unless (member.id==organizer.id || member.id==morty_user.id)
         member.add_role(Role::MEMBER, thing).save
         member
       end
@@ -124,6 +125,18 @@ namespace :ptourist do
     originator_users.each do |user|
       user.add_role(Role::ORIGINATOR, Thing).save
     end
+
+    puts "downloading MORTY"
+    morty = User.first
+    contents = open(MORTY_URL,{ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE}).read
+    image=Image.create(:creator_id=>morty.id, profile: true)
+    morty.add_role(Role::ORGANIZER, image).save
+    morty.image = image
+    morty.save
+    original_content=ImageContent.new(:image_id=>image.id,
+                                      :content_type=>"image/jpeg",
+                                      :content=>BSON::Binary.new(contents))
+    ImageContentCreator.new(image, original_content).build_contents.save!
 
     puts "users:#{User.pluck(:name)}"
   end
