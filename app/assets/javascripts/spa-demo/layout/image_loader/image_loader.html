@@ -12,7 +12,7 @@
        type="file"
        accept=".jpeg"
        ng-hide="$ctrl.file" 
-       required="true"
+       ng-required="{{$ctrl.file}}"
        ngf-select
        ng-model="$ctrl.file"
        ngf-fix-orientation="true"
@@ -24,7 +24,6 @@
      ng-show="$ctrl.file && $ctrl.objectUrl">         
 
 <div ng-transclude></div>
-
 <!--
 <button ng-click="$ctrl.debug()">Debug</button>
 -->         

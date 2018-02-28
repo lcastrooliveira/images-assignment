@@ -39,12 +39,16 @@
         function(response){
           vm.id = response.data.data.id;
           console.log("signup complete", response.data, vm);
-          console.log("saving image", vm.item);
-          vm.item.$save().then(
-            function(){
-               $state.go("home"); 
-            },
-            function(error) {console.log(error)});
+          if(vm.item.image_content) {
+            console.log("saving image")
+            vm.item.$save().then(
+              function(){
+                 $state.go("home"); 
+              },
+              function(error) {console.log(error)});
+          } else {
+            $state.go("home"); 
+          }
         },
         function(response){
           vm.signupForm["errors"]=response.data.errors;

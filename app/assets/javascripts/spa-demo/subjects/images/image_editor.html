@@ -4,32 +4,33 @@
 
   <div class="image-content row col-lg-12">
     <label class="col-xs-3"></label>
-    <div class="col-xs-12 col-sm-9 image-rendering">  
+    <div class="col-xs-12 col-sm-9 image-rendering">
       <div class="image-existing">
-        <img class="img-responsive img-rounded" 
-             style="width: 250px"             
+        <img class="img-responsive img-rounded"
+             style="width: 250px"
              ng-src="{{$ctrl.item.content_url}}?width=250"
              ng-if="$ctrl.item.content_url" />
-      </div>  
+      </div>
 
       <sd-image-loader
             class="image-select"
+            put="true"
             result-data-uri="$ctrl.setImageContent(dataUri)"
             ng-if="!$ctrl.item.id && $ctrl.authz.canCreate">
           <span class="invalid"
                 ng-show="imageform['image-file'].$error.maxSize"
-                >image size is too large (max=10MB)</span>          
-      </sd-image-loader>      
+                >image size is too large (max=10MB)</span>
+      </sd-image-loader>
       <span class="invalid">{{$ctrl.item.errors.content_type}}</span>
-      <span class="invalid">{{$ctrl.item.errors.content}}</span>      
+      <span class="invalid">{{$ctrl.item.errors.content}}</span>
     </div>
   </div>
 
   <div class="image-caption row col-lg-12">
     <label class="col-xs-3">Caption:</label>
     <input class="col-xs-9"
-           name="image-caption" 
-           ng-model="$ctrl.item.caption" 
+           name="image-caption"
+           ng-model="$ctrl.item.caption"
            ng-readonly="!$ctrl.authz.canUpdate"
            maxlength="80"
            pattern=".{3,}" title="3 character minimum for Caption"/>
@@ -54,8 +55,8 @@
                 $ctrl.authz.authenticated">
     <label class="col-xs-3">Linkable Things:</label>
     <div class="link-things" class="col-xs-9">
-      <select name="linkable-things" 
-              ng-model="$ctrl.selected_linkables"               
+      <select name="linkable-things"
+              ng-model="$ctrl.selected_linkables"
               multiple>
         <option ng-repeat="thing in $ctrl.linkable_things | orderBy:'name'"
                 value="{{thing.id}}">{{thing.name}}</option>
@@ -75,17 +76,17 @@
       <span ng-show="$ctrl.item.id">
         <button name="image-update"
                 type="submit"
-                ng-show="$ctrl.authz.canUpdate" 
+                ng-show="$ctrl.authz.canUpdate"
                 ng-disabled="!imageform.$dirty"
                 ng-click="$ctrl.update()">Update Image</button>
         <button name="image-update"
                 type="submit"
-                ng-show="!$ctrl.authz.canUpdate" 
+                ng-show="!$ctrl.authz.canUpdate"
                 ng-disabled="$ctrl.selected_linkables.length==0"
                 ng-click="$ctrl.linkThings()">Link to Things</button>
         <button name="image-delete"
                 type="submit"
-                ng-show="$ctrl.authz.canDelete" 
+                ng-show="$ctrl.authz.canDelete"
                 ng-click="$ctrl.remove()">Delete Image</button>
       </span>
     </span>
